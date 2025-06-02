@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Недооценённые уровни Geometry Dash</title>
+    <style>
+        body {
+            background: #fff;
+            color: #222;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: #f8f8f8;
+            padding: 2rem 0 1rem 0;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+        h1 {
+            margin: 0;
+            font-size: 2.2rem;
+        }
+        nav {
+            margin-top: 1rem;
+        }
+        .nav-btn {
+            background: #fff;
+            color: #1976d2;
+            border: 1px solid #1976d2;
+            border-radius: 6px;
+            padding: 0.5rem 1.2rem;
+            margin: 0 0.3rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .nav-btn:hover, .nav-btn.active {
+            background: #1976d2;
+            color: #fff;
+        }
+        main {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px #0001;
+        }
+        .levels-list {
+            margin-top: 1rem;
+        }
+        .level {
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .level-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        .level-author {
+            color: #888;
+            font-size: 0.95rem;
+        }
+        .level-desc {
+            margin: 0.5rem 0;
+        }
+        .level-link {
+            color: #1976d2;
+            text-decoration: underline;
+            word-break: break-all;
+        }
+        .comments-section {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+        .comments-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .comments-list div {
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            background: #f1f1f1;
+            border-radius: 6px;
+        }
+        .comment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .comment-form input, .comment-form textarea {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        .comment-form button {
+            background: #222;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 0.6rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .comment-form button:hover {
+            background: #444;
+        }
+        .section {
+            display: block;
+        }
+        .creator-block {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .creator-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: #eee;
+        }
+        .best-list {
+            margin: 1rem 0 1rem 1.5rem;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+    <div id="botCheckModal" style="position:fixed;z-index:9999;left:0;top:0;width:100vw;height:100vh;background:rgba(255,255,255,0.98);display:flex;align-items:center;justify-content:center;">
+        <div style="background:#fff;padding:2rem 2.5rem;border-radius:12px;box-shadow:0 2px 16px #0002;text-align:center;max-width:90vw;">
+            <h2>Проверка на бота</h2>
+            <p>Пожалуйста, выберите картинку с котом:</p>
+            <div id="captchaImages" style="display:flex;gap:1.5rem;justify-content:center;margin:1.5rem 0;"></div>
+            <div id="captchaError" style="color:#d32f2f;margin-bottom:1rem;display:none;">Неверно! Попробуйте ещё раз.</div>
+        </div>
+    </div>
+    <header>
+        <h1>Недооценённые уровни Geometry Dash</h1>
+        <nav style="margin-top:1rem;">
+            <button class="nav-btn" onclick="showSection('levels')">Уровни</button>
+            <button class="nav-btn" onclick="showSection('comments')">Комментарии</button>
+            <button class="nav-btn" onclick="showSection('about')">О сайте</button>
+            <button class="nav-btn" onclick="showSection('best')">Лучшие гдешеры</button>
+            <button class="nav-btn" onclick="showSection('instructions')">Инструкция</button>
+            <button class="nav-btn" onclick="showSection('codegen')">Генератор кода</button>
+        </nav>
+    </header>
+    <main>
+        <section class="levels-list section" id="levelsSection">
+            <!-- Здесь будут появляться уровни -->
+        </section>
+        <section class="section" id="commentsSection" style="display:none">
+            <h2>Комментарии</h2>
+            <div class="comments-list" id="siteCommentsList"></div>
+            <form class="comment-form" id="siteCommentForm" style="margin-top:1rem;">
+                <input type="text" name="user" placeholder="Ваше имя" required style="margin-bottom:5px;">
+                <textarea name="text" placeholder="Ваш комментарий" rows="2" required></textarea>
+                <button type="submit">Оставить комментарий</button>
+            </form>
+        </section>
+        <section class="section" id="aboutSection" style="display:none">
+            <h2>О сайте</h2>
+            <p>Этот сайт создан для того, чтобы делиться недооценёнными уровнями Geometry Dash и поддерживать авторов. Здесь вы можете найти интересные уровни, оставить комментарий и познакомиться с лучшими игроками.</p>
+            <h3>Как выложить уровень на сайт?</h3>
+            <ol style="margin-bottom:1.5rem;">
+                <li>Подготовьте информацию о своём уровне: <b>название</b>, <b>автор</b>, <b>описание</b>, <b>ссылка на уровень</b> (YouTube, GD, др.).</li>
+                <li>Скопируйте <b>код заявки</b> из вкладки "Генератор кода" и заполните все поля.</li>
+                <li>Отправьте заполненный код на почту <a href="mailto:gdnedoursait@gmail.com">gdnedoursait@gmail.com</a> с темой письма "Уровень для сайта".</li>
+                <li>После проверки ваш уровень появится на сайте!</li>
+            </ol>
+            <h3>Создатель сайта</h3>
+            <div class="creator-block">
+                <div>
+                    <b>sirdounow</b><br>
+                    <span style="color:#888">Создатель и администратор сайта, топ-1 гдешер именно на этом сайте</span><br>
+                    <span style="color:#444">Активный игрок Geometry Dash, поддерживаю сообщество и помогаю развивать сайт для всех любителей недооценённых уровней!</span>
+                </div>
+            </div>
+        </section>
+        <section class="section" id="bestSection" style="display:none">
+            <h2>Лучшие гдешеры сайта</h2>
+            <ol class="best-list">
+                <li><b>sirdounow</b> — 4000★ <span style="color:#888;font-size:0.95em;">(топ-1 именно на этом сайте)</span></li>
+            </ol>
+        </section>
+        <section class="section" id="instructionsSection" style="display:none">
+            <h2>Инструкция: как выложить уровень на сайт</h2>
+            <ol style="margin-bottom:1.5rem;">
+                <li>Подготовьте информацию о своём уровне: <b>название</b>, <b>автор</b>, <b>описание</b>, <b>ссылка на уровень</b> (YouTube, GD, др.).</li>
+                <li>Скопируйте <b>код заявки</b> из вкладки "Генератор кода" и заполните все поля.</li>
+                <li>Отправьте заполненный код на почту <a href="mailto:gdnedoursait@gmail.com">gdnedoursait@gmail.com</a> с темой письма "Уровень для сайта".</li>
+                <li>После проверки ваш уровень появится на сайте!</li>
+            </ol>
+            <p>Если возникли вопросы — пишите на почту или в комментариях на сайте.</p>
+        </section>
+        <section class="section" id="codegenSection" style="display:none">
+            <h2>Генератор кода заявки</h2>
+            <form id="codeGenForm" class="comment-form" style="max-width:400px;">
+                <input type="text" id="cgName" placeholder="Название уровня" required>
+                <input type="text" id="cgAuthor" placeholder="Автор" required>
+                <textarea id="cgDesc" placeholder="Описание" rows="2" required></textarea>
+                <input type="text" id="cgLink" placeholder="Ссылка на уровень" required>
+                <button type="submit">Сгенерировать код</button>
+            </form>
+            <div id="cgResult" style="margin-top:1rem;display:none;">
+                <h4>Ваш код заявки (скопируйте и отправьте на почту):</h4>
+                <pre id="cgCode" style="background:#f8f8f8;padding:1rem;border-radius:8px;overflow-x:auto;user-select:all;"></pre>
+                <button onclick="copyGenCode()">Скопировать код</button>
+            </div>
+            <p style="color:#888;font-size:0.95em;margin-top:1.5rem;">Сгенерируйте код заявки, скопируйте его и отправьте на почту <b>gdnedoursait@gmail.com</b></p>
+        </section>
+    </main>
+    <script>
+        const levelsList = document.getElementById('levelsList');
+        // Массив уровней, добавляйте свои уровни здесь вручную
+        let levels = [];
+        // Хранилище комментариев (по индексу уровня)
+        let comments = JSON.parse(localStorage.getItem('gd_comments') || '{}');
+
+        function saveComments() {
+            localStorage.setItem('gd_comments', JSON.stringify(comments));
+        }
+
+        // Навигация между разделами
+        function showSection(section) {
+            document.getElementById('levelsSection').style.display = section === 'levels' ? '' : 'none';
+            document.getElementById('commentsSection').style.display = section === 'comments' ? '' : 'none';
+            document.getElementById('aboutSection').style.display = section === 'about' ? '' : 'none';
+            document.getElementById('bestSection').style.display = section === 'best' ? '' : 'none';
+            document.getElementById('instructionsSection').style.display = section === 'instructions' ? '' : 'none';
+            document.getElementById('codegenSection').style.display = section === 'codegen' ? '' : 'none';
+        }
+
+        // Перерисовка уровней теперь в #levelsSection, без комментариев
+        function renderLevels() {
+            const levelsList = document.getElementById('levelsSection');
+            levelsList.innerHTML = '';
+            levelsList.innerHTML = '<p>Пока нет загруженных уровней.</p>';
+        }
+
+        // Система комментариев для отдельного раздела
+        let siteComments = JSON.parse(localStorage.getItem('gd_site_comments') || '[]');
+        function saveSiteComments() {
+            localStorage.setItem('gd_site_comments', JSON.stringify(siteComments));
+        }
+        function renderSiteComments() {
+            const list = document.getElementById('siteCommentsList');
+            if (!list) return;
+            if (siteComments.length === 0) {
+                list.innerHTML = '<p>Комментариев пока нет.</p>';
+            } else {
+                list.innerHTML = siteComments.map(c =>
+                    `<div style="margin-bottom:8px;background:#f1f1f1;padding:0.5rem;border-radius:6px;"><b>${c.user}</b> <span style="color:#aaa;font-size:0.9em;">${c.date}</span><br>${c.text}</div>`
+                ).join('');
+            }
+        }
+        const siteCommentForm = document.getElementById('siteCommentForm');
+        if (siteCommentForm) {
+            siteCommentForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const user = this.user.value.trim();
+                const text = this.text.value.trim();
+                if (!user || !text) return;
+                siteComments.push({ user, text, date: new Date().toLocaleString() });
+                saveSiteComments();
+                renderSiteComments();
+                this.reset();
+            });
+        }
+        renderLevels();
+        renderSiteComments();
+
+        // Генератор кода заявки
+        const codeGenForm = document.getElementById('codeGenForm');
+        if (codeGenForm) {
+            codeGenForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('cgName').value.trim();
+                const author = document.getElementById('cgAuthor').value.trim();
+                const desc = document.getElementById('cgDesc').value.trim();
+                const link = document.getElementById('cgLink').value.trim();
+                const code = `Название: ${name}\nАвтор: ${author}\nОписание: ${desc}\nСсылка: ${link}\nПочта для заявки: gdnedoursait@gmail.com`;
+                document.getElementById('cgCode').innerText = code;
+                document.getElementById('cgResult').style.display = '';
+            });
+        }
+        function copyGenCode() {
+            const code = document.getElementById('cgCode').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('Код заявки скопирован!');
+            });
+        }
+        // Проверка на бота с выбором картинки
+        window.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('botCheckModal');
+            const captchaImages = document.getElementById('captchaImages');
+            const captchaError = document.getElementById('captchaError');
+            // Картинки: 1 кот, 2 не кота
+            const images = [
+                {src: 'https://cdn.pixabay.com/photo/2017/11/09/21/41/cat-2934720_1280.jpg', isCat: true},
+                {src: 'https://cdn.pixabay.com/photo/2016/11/29/09/32/dog-1861839_1280.jpg', isCat: false},
+                {src: 'https://cdn.pixabay.com/photo/2014/04/03/10/32/apple-312025_1280.png', isCat: false}
+            ];
+            // Перемешать картинки
+            images.sort(() => Math.random() - 0.5);
+            images.forEach((img, idx) => {
+                const el = document.createElement('img');
+                el.src = img.src;
+                el.alt = 'captcha';
+                // Добавляем искажения: поворот, масштаб, фильтр
+                const rotate = Math.floor(Math.random() * 30 - 15); // -15 до +15 градусов
+                const scale = 0.9 + Math.random() * 0.3; // 0.9 до 1.2
+                const blur = Math.random() < 0.5 ? 'blur(1.5px)' : '';
+                const contrast = Math.random() < 0.5 ? 'contrast(1.3)' : '';
+                el.style = `width:100px;height:100px;object-fit:cover;border-radius:10px;cursor:pointer;border:3px solid transparent;transition:border 0.2s;transform:rotate(${rotate}deg) scale(${scale});filter:${blur} ${contrast};`;
+                el.addEventListener('click', function() {
+                    if (img.isCat) {
+                        modal.style.display = 'none';
+                    } else {
+                        el.style.border = '3px solid #d32f2f';
+                        captchaError.style.display = '';
+                        setTimeout(() => {
+                            el.style.border = '3px solid transparent';
+                            captchaError.style.display = 'none';
+                        }, 1200);
+                    }
+                });
+                captchaImages.appendChild(el);
+            });
+        });
+    </script>
+</body>
+</html>
