@@ -161,8 +161,19 @@
         </section>
         <section class="section" id="commentsSection" style="display:none">
             <h2>Комментарии</h2>
-            <div class="comments-list" id="siteCommentsList"></div>
-            <form class="comment-form" id="siteCommentForm" style="margin-top:1rem;">
+            <!-- Utterances comments widget -->
+            <div id="utterances-thread"></div>
+            <script src="https://utteranc.es/client.js"
+                repo="sergogo2/gdnedocurovni"
+                issue-term="pathname"
+                label="💬 комментарии сайта"
+                theme="github-light"
+                crossorigin="anonymous"
+                async>
+            </script>
+            <!-- /Utterances comments widget -->
+            <div class="comments-list" id="siteCommentsList" style="display:none;"></div>
+            <form class="comment-form" id="siteCommentForm" style="margin-top:1rem;display:none;">
                 <input type="text" name="user" placeholder="Ваше имя" required style="margin-bottom:5px;">
                 <textarea name="text" placeholder="Ваш комментарий" rows="2" required></textarea>
                 <button type="submit">Оставить комментарий</button>
