@@ -159,6 +159,14 @@
         <section class="levels-list section" id="levelsSection">
             <!-- Здесь будут появляться уровни -->
         </section>
+        <section style="margin-bottom:1.5rem;" id="difficultyFilters">
+            <label style="margin-right:1rem;">Фильтр по сложности:</label>
+            <button class="nav-btn" data-diff="all" onclick="filterLevels('all')">Все</button>
+            <button class="nav-btn" data-diff="easy" onclick="filterLevels('easy')">Изи</button>
+            <button class="nav-btn" data-diff="hard" onclick="filterLevels('hard')">Хард</button>
+            <button class="nav-btn" data-diff="trdno" onclick="filterLevels('trdno')">Трдно</button>
+            <button class="nav-btn" data-diff="demonoid" onclick="filterLevels('demonoid')">Demonoid</button>
+        </section>
         <section class="section" id="commentsSection" style="display:none">
             <h2>Комментарии</h2>
             <!-- Utterances comments widget -->
@@ -261,15 +269,30 @@
             document.getElementById('codegenSection').style.display = section === 'codegen' ? '' : 'none';
         }
 
+        // Фильтрация уровней по сложности
+        let currentDiff = 'all';
+        function filterLevels(diff) {
+            currentDiff = diff;
+            // Подсветка активной кнопки
+            document.querySelectorAll('#difficultyFilters .nav-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-diff') === diff);
+            });
+            renderLevels();
+        }
+
         // Перерисовка уровней теперь в #levelsSection, без комментариев
         function renderLevels() {
             const levelsList = document.getElementById('levelsSection');
             levelsList.innerHTML = '';
-            if (levels.length === 0) {
+            let filtered = levels;
+            if (currentDiff !== 'all') {
+                filtered = levels.filter(l => (l.difficulty||'').toLowerCase() === currentDiff);
+            }
+            if (filtered.length === 0) {
                 levelsList.innerHTML = '<p>Пока нет загруженных уровней.</p>';
                 return;
             }
-            levels.forEach(level => {
+            filtered.forEach(level => {
                 levelsList.innerHTML += `
                     <div class="level">
                         <div class="level-title">${level.name}</div>
@@ -372,6 +395,7 @@
                 });
                 captchaImages.appendChild(el);
             });
+            filterLevels('all');
         });
     </script>
 </body>
