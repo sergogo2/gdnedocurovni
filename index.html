@@ -234,7 +234,16 @@
     <script>
         const levelsList = document.getElementById('levelsList');
         // Массив уровней, добавляйте свои уровни здесь вручную
-        let levels = [];
+        let levels = [
+            {
+                name: 'unamed 8',
+                author: 'sirdounow',
+                desc: 'smrtil слолжности',
+                link: 'https://youtu.be/xs3JSZYdMyk',
+                email: 'gdnedoursait@gmail.com',
+                difficulty: 'demonoid'
+            }
+        ];
         // Хранилище комментариев (по индексу уровня)
         let comments = JSON.parse(localStorage.getItem('gd_comments') || '{}');
 
@@ -256,7 +265,22 @@
         function renderLevels() {
             const levelsList = document.getElementById('levelsSection');
             levelsList.innerHTML = '';
-            levelsList.innerHTML = '<p>Пока нет загруженных уровней.</p>';
+            if (levels.length === 0) {
+                levelsList.innerHTML = '<p>Пока нет загруженных уровней.</p>';
+                return;
+            }
+            levels.forEach(level => {
+                levelsList.innerHTML += `
+                    <div class="level">
+                        <div class="level-title">${level.name}</div>
+                        <div class="level-author">Автор: ${level.author}</div>
+                        <div class="level-desc">${level.desc}</div>
+                        <div>Сложность: <b style="color:#b71c1c">${level.difficulty}</b></div>
+                        <div>Ссылка: <a class="level-link" href="${level.link}" target="_blank">${level.link}</a></div>
+                        <div style="color:#888;font-size:0.95em;">Почта для заявки: ${level.email}</div>
+                    </div>
+                `;
+            });
         }
 
         // Система комментариев для отдельного раздела
