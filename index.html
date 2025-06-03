@@ -133,6 +133,16 @@
             margin: 1rem 0 1rem 1.5rem;
             font-size: 1.1rem;
         }
+        #difficultyFilters .nav-btn {
+            margin-bottom: 0.5rem;
+            margin-right: 0.5rem;
+        }
+        #difficultyFilters {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.5rem 0.5rem;
+        }
     </style>
 </head>
 <body>
@@ -158,14 +168,22 @@
     <main>
         <section class="levels-list section" id="levelsSection">
             <!-- Здесь будут появляться уровни -->
-        </section>
-        <section style="margin-bottom:1.5rem;" id="difficultyFilters">
-            <label style="margin-right:1rem;">Фильтр по сложности:</label>
-            <button class="nav-btn" data-diff="all" onclick="filterLevels('all')">Все</button>
-            <button class="nav-btn" data-diff="easy" onclick="filterLevels('easy')">Изи</button>
-            <button class="nav-btn" data-diff="hard" onclick="filterLevels('hard')">Хард</button>
-            <button class="nav-btn" data-diff="trdno" onclick="filterLevels('trdno')">Трдно</button>
-            <button class="nav-btn" data-diff="demonoid" onclick="filterLevels('demonoid')">Demonoid</button>
+            <section style="margin-bottom:1.5rem;" id="difficultyFilters">
+                <label style="margin-right:1rem;">Фильтр по сложности:</label>
+                <button class="nav-btn" data-diff="all" onclick="filterLevels('all')">Все</button>
+                <button class="nav-btn" data-diff="very-easy" onclick="filterLevels('very-easy')">Очень легко</button>
+                <button class="nav-btn" data-diff="easy" onclick="filterLevels('easy')">🟢 Легко</button>
+                <button class="nav-btn" data-diff="normal" onclick="filterLevels('normal')">🔵 Нормально</button>
+                <button class="nav-btn" data-diff="hard" onclick="filterLevels('hard')">🟡 Тяжело</button>
+                <button class="nav-btn" data-diff="harder" onclick="filterLevels('harder')">🟠 Ещё тяжелее</button>
+                <button class="nav-btn" data-diff="insane" onclick="filterLevels('insane')">🔴 Почти демон</button>
+                <button class="nav-btn" data-diff="easy-demon" onclick="filterLevels('easy-demon')">⚫ Лёгкий демон</button>
+                <button class="nav-btn" data-diff="medium-demon" onclick="filterLevels('medium-demon')">🟣 Средний демон</button>
+                <button class="nav-btn" data-diff="hard-demon" onclick="filterLevels('hard-demon')">🟤 Тяжёлый демон</button>
+                <button class="nav-btn" data-diff="insane-demon" onclick="filterLevels('insane-demon')">⚫ Очень сложный демон</button>
+                <button class="nav-btn" data-diff="extreme-demon" onclick="filterLevels('extreme-demon')">🔥 Ультрасложный демон</button>
+                <button class="nav-btn" data-diff="t" onclick="filterLevels('t')">💀 T</button>
+            </section>
         </section>
         <section class="section" id="commentsSection" style="display:none">
             <h2>Комментарии</h2>
@@ -200,7 +218,7 @@
             <h3>Создатель сайта</h3>
             <div class="creator-block">
                 <div>
-                    <b>sirdounow</b><br>
+                    <b>sirdounow <span style="color:#1976d2;font-size:0.95em;">[owner]</span></b><br>
                     <span style="color:#888">Создатель и администратор сайта, топ-1 гдешер именно на этом сайте</span><br>
                     <span style="color:#444">Активный игрок Geometry Dash, поддерживаю сообщество и помогаю развивать сайт для всех любителей недооценённых уровней!</span>
                 </div>
@@ -209,7 +227,7 @@
         <section class="section" id="bestSection" style="display:none">
             <h2>Лучшие гдешеры сайта</h2>
             <ol class="best-list">
-                <li><b>sirdounow</b> — 4000★ <span style="color:#888;font-size:0.95em;">(топ-1 именно на этом сайте)</span></li>
+                <li><b>sirdounow <span style="color:#1976d2;font-size:0.95em;">[owner]</span></b> — 4000★ <span style="color:#888;font-size:0.95em;">(топ-1 именно на этом сайте)</span></li>
             </ol>
         </section>
         <section class="section" id="instructionsSection" style="display:none">
@@ -245,11 +263,11 @@
         let levels = [
             {
                 name: 'unamed 8',
-                author: 'sirdounow',
+                author: 'sirdounow [owner]',
                 desc: 'smrtil слолжности',
                 link: 'https://youtu.be/xs3JSZYdMyk',
                 email: 'gdnedoursait@gmail.com',
-                difficulty: 'demonoid'
+                difficulty: 't'
             }
         ];
         // Хранилище комментариев (по индексу уровня)
@@ -262,6 +280,7 @@
         // Навигация между разделами
         function showSection(section) {
             document.getElementById('levelsSection').style.display = section === 'levels' ? '' : 'none';
+            document.getElementById('difficultyFilters').style.display = section === 'levels' ? '' : 'none';
             document.getElementById('commentsSection').style.display = section === 'comments' ? '' : 'none';
             document.getElementById('aboutSection').style.display = section === 'about' ? '' : 'none';
             document.getElementById('bestSection').style.display = section === 'best' ? '' : 'none';
@@ -269,27 +288,31 @@
             document.getElementById('codegenSection').style.display = section === 'codegen' ? '' : 'none';
         }
 
-        // Фильтрация уровней по сложности
+        // Фильтрация уровней по сложности (улучшено)
         let currentDiff = 'all';
         function filterLevels(diff) {
             currentDiff = diff;
-            // Подсветка активной кнопки
             document.querySelectorAll('#difficultyFilters .nav-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.getAttribute('data-diff') === diff);
             });
             renderLevels();
         }
 
-        // Перерисовка уровней теперь в #levelsSection, без комментариев
+        // Перерисовка уровней с поддержкой новых сложностей
         function renderLevels() {
             const levelsList = document.getElementById('levelsSection');
+            // Скрываем фильтры вне раздела уровней
+            document.getElementById('difficultyFilters').style.display = '';
+            // Удаляем старые уровни (оставляем только фильтры)
+            let filterSection = document.getElementById('difficultyFilters');
             levelsList.innerHTML = '';
+            levelsList.appendChild(filterSection);
             let filtered = levels;
             if (currentDiff !== 'all') {
                 filtered = levels.filter(l => (l.difficulty||'').toLowerCase() === currentDiff);
             }
             if (filtered.length === 0) {
-                levelsList.innerHTML = '<p>Пока нет загруженных уровней.</p>';
+                levelsList.innerHTML += '<p>Пока нет загруженных уровней.</p>';
                 return;
             }
             filtered.forEach(level => {
@@ -298,12 +321,32 @@
                         <div class="level-title">${level.name}</div>
                         <div class="level-author">Автор: ${level.author}</div>
                         <div class="level-desc">${level.desc}</div>
-                        <div>Сложность: <b style="color:#b71c1c">${level.difficulty}</b></div>
+                        <div>Сложность: <b style="color:#b71c1c">${getDifficultyLabel(level.difficulty)}</b></div>
                         <div>Ссылка: <a class="level-link" href="${level.link}" target="_blank">${level.link}</a></div>
                         <div style="color:#888;font-size:0.95em;">Почта для заявки: ${level.email}</div>
                     </div>
                 `;
             });
+        }
+        // Функция для красивого отображения сложности
+        function getDifficultyLabel(diff) {
+            const map = {
+                'very-easy': 'Очень легко',
+                'easy': '🟢 Легко',
+                'normal': '🔵 Нормально',
+                'hard': '🟡 Тяжело',
+                'harder': '🟠 Ещё тяжелее',
+                'insane': '🔴 Почти демон',
+                'easy-demon': '⚫ Лёгкий демон',
+                'medium-demon': '🟣 Средний демон',
+                'hard-demon': '🟤 Тяжёлый демон',
+                'insane-demon': '⚫ Очень сложный демон',
+                'extreme-demon': '🔥 Ультрасложный демон',
+                't': '💀 Tоп 1 демон',
+                'demonoid': 'Demonoid',
+                'demons-in-between': 'Demons in between'
+            };
+            return map[(diff||'').toLowerCase()] || diff;
         }
 
         // Система комментариев для отдельного раздела
